@@ -1,5 +1,5 @@
 <template>
     <div>
-      <h1>Service Detals</h1>
+        <h1>Service Detals</h1>
     </div>
 </template>
