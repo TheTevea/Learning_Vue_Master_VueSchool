@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "supabase:init": "supabase init",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref hlbspzhbmsvqpwfcwemu"
+    "supabase:link": "supabase link --project-ref ylluucwtptdqtfwkfftz",
+    "db:migrate:new": "supabase migration new schema_projects",
+    "db:reset": "supabase db reset --linked"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
@@ -17,6 +19,7 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@types/node": "^22.13.10",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
