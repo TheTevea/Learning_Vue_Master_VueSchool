@@ -1,6 +1,10 @@
 import { fakerEN_US as faker } from "@faker-js/faker";
+import { createClient } from "@supabase/supabase-js";
 
-const personName = faker.person.fullName();
-const personBio = faker.person.bio();
+// Create a single supabase client for interacting with your database
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.SERVICE_ROLE_KEY,
+);
 
-console.log("hi my name is", personName, "and I am", personBio);
+console.log(supabase);
