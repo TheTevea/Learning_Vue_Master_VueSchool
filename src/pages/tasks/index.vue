@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { supabase } from '../../lip/supabaseClient.ts';
+import { supabase } from '@/lip/supabaseClient.ts';
 import type { Tables } from '../../../database/types.ts';
 import { ref } from 'vue';
 const tasks = ref<Tables<'tasks'>[] | null>(null);
