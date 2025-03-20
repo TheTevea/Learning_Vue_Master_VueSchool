@@ -6,20 +6,83 @@ const supabase = createClient(
   process.env.SERVICE_ROLE_KEY,
 );
 
-const seedProjects = async (numEntries) => {
-  const project = [];
+const logErrorAndExit = (tableName, error) => {
+  console.error(
+    `An error occurred in table '${tableName}' with code ${error.code}: ${error.message}`,
+  );
+  process.exit(1);
+};
+
+const logStep = (stepMessage) => {
+  console.log(stepMessage);
+};
+
+const seedProjects = async (numEntries, userId) => {
+  logStep("Seeding projects...");
+  const projects = [];
 
   for (let i = 0; i < numEntries; i++) {
     const name = faker.lorem.words(3);
 
-    project.push({
+    projects.push({
+      name: name,
+      slug: name.toLocaleLowerCase().replace(/ /g, "-"),
+      description: faker.lorem.paragraphs(2),
+      status: faker.helpers.arrayElement(["in-progress", "completed"]),
+      collaborators: faker.helpers.arrayElements([userId]),
+    });
+  }
+
+  const { data, error } = await supabase
+    .from("projects")
+    .insert(projects)
+    .select("id");
+
+  if (error) return logErrorAndExit("Projects", error);
+
+  logStep("Projects seeded successfully.");
+
+  return data;
+};
+
+const seedTasks = async (numEntries, projectsIds, userId) => {
+  logStep("Seeding tasks...");
+  const tasks = [];
+
+  for (let i = 0; i < numEntries; i++) {
+    const name = faker.lorem.words(3);
+
+    tasks.push({
       name: name,
       slug: name.toLocaleLowerCase().replace(/ /g, "-"),
       status: faker.helpers.arrayElement(["in-progress", "completed"]),
-      collaborators: faker.helpers.arrayElements([1, 2, 4]),
+      description: faker.lorem.paragraph(),
+      due_date: faker.date.future(),
+      // profile_id: userId,
+      project_id: faker.helpers.arrayElement(projectsIds),
+      collaborators: faker.helpers.arrayElements([userId]),
     });
   }
-  await supabase.from("projects").insert(project);
+
+  const { data, error } = await supabase
+    .from("tasks")
+    .insert(tasks)
+    .select("id");
+
+  if (error) return logErrorAndExit("Tasks", error);
+
+  logStep("Tasks seeded successfully.");
+
+  return data;
 };
 
-await seedProjects(10);
+const seedDatabase = async (numEntriesPerTable) => {
+  const projectsIds = (await seedProjects(numEntriesPerTable)).map(
+    (project) => project.id,
+  );
+  await seedTasks(numEntriesPerTable, projectsIds);
+};
+
+const numEntriesPerTable = 10;
+
+await seedDatabase(numEntriesPerTable);
