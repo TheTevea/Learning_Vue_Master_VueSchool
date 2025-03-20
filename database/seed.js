@@ -54,13 +54,12 @@ const seedTasks = async (numEntries, projectsIds, userId) => {
 
     tasks.push({
       name: name,
-      slug: name.toLocaleLowerCase().replace(/ /g, "-"),
       status: faker.helpers.arrayElement(["in-progress", "completed"]),
       description: faker.lorem.paragraph(),
       due_date: faker.date.future(),
       // profile_id: userId,
       project_id: faker.helpers.arrayElement(projectsIds),
-      collaborators: faker.helpers.arrayElements([userId]),
+      collaborators: faker.helpers.arrayElements([1, 2, 3]),
     });
   }
 
@@ -77,7 +76,7 @@ const seedTasks = async (numEntries, projectsIds, userId) => {
 };
 
 const seedDatabase = async (numEntriesPerTable) => {
-  const projectsIds = (await seedProjects(numEntriesPerTable)).map(
+  const projectsIds = (await seedProjects(numEntriesPerTable, 3, 2, 4)).map(
     (project) => project.id,
   );
   await seedTasks(numEntriesPerTable, projectsIds);

@@ -5,6 +5,10 @@
     "moduleResolution": "Bundler",
     "type": "node",
     "types": ["unplugin-vue-router/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Linting */
     "strict": true,
