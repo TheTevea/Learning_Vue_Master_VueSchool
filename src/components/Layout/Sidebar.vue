@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SidebarLink from '@/components/Layout/SidebarLink.vue';
+import { Button } from '@/components/ui/Button';
 
 const links = [
     { to: '/', title: 'Dashboard', icon: 'lucide:house' },
@@ -21,13 +22,13 @@ const accountLinks = [
         <div
             class="flex h-16 items-center border-b px-2 lg:px-4 shrink-0 gap-1 justify-between"
         >
-            <button variant="outline" size="icon" class="w-8 h-8">
+            <Button variant="outline" size="icon" class="w-8 h-8">
                 <iconify-icon icon="lucide:menu"></iconify-icon>
-            </button>
+            </Button>
 
-            <button variant="outline" size="icon" class="w-8 h-8">
+            <Button variant="outline" size="icon" class="w-8 h-8">
                 <iconify-icon icon="lucide:plus"></iconify-icon>
-            </button>
+            </Button>
         </div>
 
         <nav class="flex flex-col gap-2 justify-between h-full relative">
