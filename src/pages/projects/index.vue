@@ -1,25 +1,13 @@
 <template>
-    <div>
-        <h1>Services</h1>
-        <p>Our services are awesome!</p>
-
-        <h2>Projects</h2>
-        <Button class="rounded-full">Hello projects</Button>
-        <ul>
-            <li v-for="project in projects" :key="project.id">
-                <router-link :to="`/projects/${project.id}`">{{
-                    project.name
-                }}</router-link>
-            </li>
-        </ul>
-    </div>
+    <DataTable v-if="projects" :columns="columns" :data="projects"></DataTable>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/Button';
 import { supabase } from '@/lip/supabaseClient.ts';
 import type { Tables } from '../../../database/types.ts';
-import { ref } from 'vue';
+import { h, ref } from 'vue';
+import DataTable from '@/components/ui/data-table/DataTable.vue';
+import type { ColumnDef } from '@tanstack/vue-table';
 const projects = ref<Tables<'projects'>[] | null>(null);
 
 (async () => {
@@ -32,4 +20,41 @@ const projects = ref<Tables<'projects'>[] | null>(null);
 
     projects.value = data;
 })();
+
+const columns: ColumnDef<Tables<'projects'>>[] = [
+    {
+        accessorKey: 'name',
+        header: () => h('div', { class: 'text-left' }, 'Name'),
+        cell: ({ row }) => {
+            return h(
+                'div',
+                { class: 'text-left font-medium' },
+                row.getValue('name')
+            );
+        },
+    },
+    {
+        accessorKey: 'status',
+        header: () => h('div', { class: 'text-left' }, 'Status'),
+        cell: ({ row }) => {
+            return h(
+                'div',
+                { class: 'text-left font-medium' },
+                row.getValue('status')
+            );
+        },
+    },
+
+    {
+        accessorKey: 'collaborators',
+        header: () => h('div', { class: 'text-left' }, 'Collaborators'),
+        cell: ({ row }) => {
+            return h(
+                'div',
+                { class: 'text-left font-medium' },
+                JSON.stringify(row.getValue('collaborators'))
+            );
+        },
+    },
+];
 </script>
