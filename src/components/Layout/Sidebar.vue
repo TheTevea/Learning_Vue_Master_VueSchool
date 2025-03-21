@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import SidebarLink from '@/components/Layout/SidebarLink.vue';
-import { Button } from '@/components/ui/Button';
-
+import Button from '@/components/ui/button/Button.vue';
 const links = [
     { to: '/', title: 'Dashboard', icon: 'lucide:house' },
     { to: '/projects', title: 'Projects', icon: 'lucide:building-2' },
@@ -9,9 +8,9 @@ const links = [
 ];
 
 const accountLinks = [
-    { to: '/profile', title: 'Profile', icon: 'lucide:user' },
-    { to: '/settings', title: 'Settings', icon: 'lucide:settings' },
-    { to: '/signout', title: 'Sign out', icon: 'lucide:log-out' },
+    { to: '/', title: 'Profile', icon: 'lucide:user' },
+    { to: '/', title: 'Settings', icon: 'lucide:settings' },
+    { to: '/', title: 'Sign out', icon: 'lucide:log-out' },
 ];
 </script>
 

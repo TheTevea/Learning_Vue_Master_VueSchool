@@ -1,7 +1,3 @@
-<template>
-    <DataTable v-if="tasks" :columns="columns" :data="tasks"></DataTable>
-</template>
-
 <script setup lang="ts">
 import { h } from 'vue';
 import type { ColumnDef } from '@tanstack/vue-table';
@@ -80,3 +76,13 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
     },
 ];
 </script>
+
+<template>
+    <DataTable v-if="tasks" :columns="columns" :data="tasks">
+        <template #cell-name="{ cell }">
+            <RouterLink :to="`/tasks/${cell.row.original.id}`">
+                {{ cell.getValue() }}
+            </RouterLink>
+        </template>
+    </DataTable>
+</template>
