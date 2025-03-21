@@ -8,6 +8,7 @@ import type { Tables } from '../../../database/types.ts';
 import { h, ref } from 'vue';
 import DataTable from '@/components/ui/data-table/DataTable.vue';
 import type { ColumnDef } from '@tanstack/vue-table';
+import { RouterLink } from 'vue-router';
 const projects = ref<Tables<'projects'>[] | null>(null);
 
 (async () => {
@@ -27,9 +28,12 @@ const columns: ColumnDef<Tables<'projects'>>[] = [
         header: () => h('div', { class: 'text-left' }, 'Name'),
         cell: ({ row }) => {
             return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('name')
+                RouterLink,
+                {
+                    to: `/projects/${row.original.slug}`,
+                    class: 'text-left font-medium hover:bg-muted w-full block',
+                },
+                () => row.getValue('name')
             );
         },
     },

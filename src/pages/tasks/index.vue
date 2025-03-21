@@ -9,6 +9,7 @@ import DataTable from '@/components/ui/data-table/DataTable.vue';
 import { supabase } from '@/lip/supabaseClient.ts';
 import type { Tables } from '../../../database/types.ts';
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 const tasks = ref<Tables<'tasks'>[] | null>(null);
 
 (async () => {
@@ -24,9 +25,12 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
         header: () => h('div', { class: 'text-left' }, 'Name'),
         cell: ({ row }) => {
             return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('name')
+                RouterLink,
+                {
+                    to: `/projects/${row.original.id}`,
+                    class: 'text-left font-medium hover:bg-muted w-full block',
+                },
+                () => row.getValue('name')
             );
         },
     },
