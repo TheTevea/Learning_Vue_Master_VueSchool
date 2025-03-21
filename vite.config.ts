@@ -4,6 +4,7 @@ import VueRouter from "unplugin-vue-router/vite";
 import autoprefixer from "autoprefixer";
 import tailwind from "tailwindcss";
 import path from "node:path";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,7 +13,17 @@ export default defineConfig({
       plugins: [tailwind(), autoprefixer()],
     },
   },
-  plugins: [VueRouter(), vue()],
+  plugins: [
+    VueRouter(),
+    vueDevTools(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (element) => element.startsWith("iconify-icon"),
+        },
+      },
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

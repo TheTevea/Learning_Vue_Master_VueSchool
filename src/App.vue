@@ -2,8 +2,17 @@
     <nav
         class="h-16 border-b bg-muted/40 flex justify-between items-center px-8"
     >
-        <form class="w-full max-w-96">
-            <Input class="bg-background" type="text" placeholder="search..." />
+        <form class="relative w-full h-fit max-w-96">
+            <iconify-icon
+                class="absolute top-[50%] translate-y-[-50%] left-2.5 text-muted-foreground"
+                icon="lucide:search"
+            ></iconify-icon>
+
+            <Input
+                class="w-full pl-8 bg-background focus-visible:ring-0"
+                type="text"
+                placeholder="search..."
+            />
         </form>
         <DropdownMenu>
             <DropdownMenuTrigger>
