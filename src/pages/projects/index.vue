@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { supabase } from '@/lip/supabaseClient.ts';
 import type { Tables } from '../../../database/types.ts';
 import { ref } from 'vue';
