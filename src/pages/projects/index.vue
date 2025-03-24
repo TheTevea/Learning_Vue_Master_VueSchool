@@ -3,7 +3,6 @@ import { supabase } from '@/lip/supabaseClient.ts';
 import type { Tables } from '../../../database/types.ts';
 import DataTable from '@/components/ui/data-table/DataTable.vue';
 import type { ColumnDef } from '@tanstack/vue-table';
-import { RouterLink } from 'vue-router';
 const projects = ref<Tables<'projects'>[] | null>(null);
 
 (async () => {
