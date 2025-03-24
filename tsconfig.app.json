@@ -22,6 +22,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "typed-router.d.ts",
-    "shims-vue.d.ts"
+    "shims-vue.d.ts",
+    "auto-imports.d.ts"
   ]
 }
