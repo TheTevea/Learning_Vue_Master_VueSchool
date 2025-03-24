@@ -7,6 +7,7 @@ import path from "node:path";
 import vueDevTools from "vite-plugin-vue-devtools";
 import AutoImport from "unplugin-auto-import/vite";
 import { VueRouterAutoImports } from "unplugin-vue-router";
+import Components from "unplugin-vue-components/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -28,6 +29,9 @@ export default defineConfig({
       imports: ["vue", VueRouterAutoImports],
       dts: true,
       viteOptimizeDeps: true,
+    }),
+    Components({
+      /* options */
     }),
     vueDevTools(),
     vue({
