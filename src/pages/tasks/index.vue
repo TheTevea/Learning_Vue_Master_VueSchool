@@ -5,6 +5,7 @@ import type { Tables } from '../../../database/types.ts';
 import { RouterLink } from 'vue-router';
 const tasks = ref<Tables<'tasks'>[] | null>(null);
 
+usePageStore().pageData.title = 'My Tasks';
 const fetchTasks = async () => {
     const { data, error } = await supabase.from('tasks').select();
     if (error) console.log(error);

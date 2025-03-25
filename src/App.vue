@@ -2,9 +2,9 @@
 
 <template>
     <AuthLayout>
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component, route }">
             <Suspense v-if="Component" :timeout="0">
-                <Component :is="Component"> </Component>
+                <Component :is="Component" :key="route.name"> </Component>
                 <template #fallback>
                     <p>Loading...</p>
                 </template>

@@ -5,6 +5,7 @@ import type { ColumnDef } from '@tanstack/vue-table';
 import { RouterLink } from 'vue-router';
 const projects = ref<Tables<'projects'>[] | null>(null);
 
+usePageStore().pageData.title = 'My Projects';
 const fetchProjects = async () => {
     const { data, error } = await supabase
         .from('projects')
