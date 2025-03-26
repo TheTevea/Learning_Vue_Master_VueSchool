@@ -1,3 +1,6 @@
+<script setup lang="ts">
+usePageStore().pageData.title = 'Dashboard';
+</script>
 <template>
-    <router-view></router-view>
+    <p>dash board</p>
 </template>

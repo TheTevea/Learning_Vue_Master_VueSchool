@@ -1,85 +1,24 @@
 <script setup lang="ts">
-import type { ColumnDef } from '@tanstack/vue-table';
-import { supabase } from '@/lip/supabaseClient.ts';
-import type { Tables } from '../../../database/types.ts';
-import { RouterLink } from 'vue-router';
-const tasks = ref<Tables<'tasks'>[] | null>(null);
+import { columns } from '@/utils/TableColumns/TasksColumns.ts';
+import {
+    type tasksWithProjects,
+    tasksWithProjectsQuery,
+} from '@/utils/supaQueries.ts';
 
-(async () => {
-    const { data, error } = await supabase.from('tasks').select();
+usePageStore().pageData.title = 'My Tasks';
+
+const tasks = ref<tasksWithProjects | null>(null);
+
+const fetchTasks = async () => {
+    const { data, error } = await tasksWithProjectsQuery;
     if (error) console.log(error);
 
     tasks.value = data;
-})();
+};
 
-const columns: ColumnDef<Tables<'tasks'>>[] = [
-    {
-        accessorKey: 'name',
-        header: () => h('div', { class: 'text-left' }, 'Name'),
-        cell: ({ row }) => {
-            return h(
-                RouterLink,
-                {
-                    to: `/projects/${row.original.id}`,
-                    class: 'text-left font-medium hover:bg-muted w-full block',
-                },
-                () => row.getValue('name')
-            );
-        },
-    },
-    {
-        accessorKey: 'status',
-        header: () => h('div', { class: 'text-left' }, 'Status'),
-        cell: ({ row }) => {
-            return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('status')
-            );
-        },
-    },
-    {
-        accessorKey: 'due_date',
-        header: () => h('div', { class: 'text-left' }, 'Due Date'),
-        cell: ({ row }) => {
-            return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('due_date')
-            );
-        },
-    },
-    {
-        accessorKey: 'project_id',
-        header: () => h('div', { class: 'text-left' }, 'Project'),
-        cell: ({ row }) => {
-            return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('project_id')
-            );
-        },
-    },
-    {
-        accessorKey: 'collaborators',
-        header: () => h('div', { class: 'text-left' }, 'Collaborators'),
-        cell: ({ row }) => {
-            return h(
-                'div',
-                { class: 'text-left font-medium' },
-                JSON.stringify(row.getValue('collaborators'))
-            );
-        },
-    },
-];
+await fetchTasks();
 </script>
 
 <template>
-    <DataTable v-if="tasks" :columns="columns" :data="tasks">
-        <template #cell-name="{ cell }">
-            <RouterLink :to="`/tasks/${cell.row.original.id}`">
-                {{ cell.getValue() }}
-            </RouterLink>
-        </template>
-    </DataTable>
+    <DataTable v-if="tasks" :columns="columns" :data="tasks" />
 </template>
