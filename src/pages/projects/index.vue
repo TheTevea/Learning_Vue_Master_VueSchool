@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { supabase } from '@/lip/supabaseClient.ts';
-import type { Tables } from '../../../database/types.ts';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { RouterLink } from 'vue-router';
-const projects = ref<Tables<'projects'>[] | null>(null);
+import { type projects, projectsQuery } from '@/utils/supaQueries.ts';
+
+const projects = ref<projects | null>(null);
 
 usePageStore().pageData.title = 'My Projects';
 const fetchProjects = async () => {
-    const { data, error } = await supabase
-        .from('projects')
-        .select(
-            'id, name, slug, status, created_at, collaborators, description'
-        );
+    const { data, error } = await projectsQuery;
     if (error) console.log(error);
 
     projects.value = data;
@@ -19,7 +15,7 @@ const fetchProjects = async () => {
 
 await fetchProjects();
 
-const columns: ColumnDef<Tables<'projects'>>[] = [
+const columns: ColumnDef<projects[0]>[] = [
     {
         accessorKey: 'name',
         header: () => h('div', { class: 'text-left' }, 'Name'),
@@ -61,11 +57,5 @@ const columns: ColumnDef<Tables<'projects'>>[] = [
 </script>
 
 <template>
-    <DataTable v-if="projects" :columns="columns" :data="projects">
-        <template #cell-name="{ cell }">
-            <RouterLink :to="`/projects/${cell.row.original.slug}`">
-                {{ cell.getValue() }}
-            </RouterLink>
-        </template>
-    </DataTable>
+    <DataTable v-if="projects" :columns="columns" :data="projects"> </DataTable>
 </template>
