@@ -3,9 +3,14 @@ import { projectQuery } from '@/utils/supaQueries.js';
 import { type Project } from '@/utils/supaQueries.js';
 
 const project = ref<Project | null>(null);
-
 const route = useRoute();
-usePageStore().pageData.title = 'My Projects';
+
+watch(
+    () => project.value?.name,
+    () => {
+        usePageStore().pageData.title = `Project [ ${project.value?.name || ''} ]`;
+    }
+);
 const fetchProject = async () => {
     const { data, error } = await projectQuery(route.params.slug);
     if (error) console.log(error);
