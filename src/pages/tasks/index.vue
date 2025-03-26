@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import type { ColumnDef } from '@tanstack/vue-table';
 import { supabase } from '@/lip/supabaseClient.ts';
-import type { Tables } from '../../../database/types.ts';
+import type { QueryData } from '@supabase/supabase-js';
 import { RouterLink } from 'vue-router';
-const tasks = ref<Tables<'tasks'>[] | null>(null);
 
 usePageStore().pageData.title = 'My Tasks';
+
+const tasksWithProjectsQuery = supabase.from('tasks').select(`*,
+    projects(
+      id,
+      name,
+      slug
+    )
+    `);
+
+type tasksWithProjects = QueryData<typeof tasksWithProjectsQuery>;
+const tasks = ref<tasksWithProjects | null>(null);
+
 const fetchTasks = async () => {
-    const { data, error } = await supabase.from('tasks').select();
+    const { data, error } = await tasksWithProjectsQuery;
     if (error) console.log(error);
 
     tasks.value = data;
@@ -15,7 +26,7 @@ const fetchTasks = async () => {
 
 await fetchTasks();
 
-const columns: ColumnDef<Tables<'tasks'>>[] = [
+const columns: ColumnDef<tasksWithProjects[0]>[] = [
     {
         accessorKey: 'name',
         header: () => h('div', { class: 'text-left' }, 'Name'),
@@ -23,7 +34,7 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
             return h(
                 RouterLink,
                 {
-                    to: `/projects/${row.original.id}`,
+                    to: `/tasks/${row.original.id}`,
                     class: 'text-left font-medium hover:bg-muted w-full block',
                 },
                 () => row.getValue('name')
@@ -53,14 +64,19 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
         },
     },
     {
-        accessorKey: 'project_id',
-        header: () => h('div', { class: 'text-left' }, 'Project'),
+        accessorKey: 'projects',
+        header: () => h('div', { class: 'text-left' }, 'Projects'),
         cell: ({ row }) => {
-            return h(
-                'div',
-                { class: 'text-left font-medium' },
-                row.getValue('project_id')
-            );
+            return row.original.projects
+                ? h(
+                      RouterLink,
+                      {
+                          to: `/projects/${row.original.projects.slug}`,
+                          class: 'text-left font-medium hover:bg-muted w-full block',
+                      },
+                      () => row.original.projects?.name
+                  )
+                : '';
         },
     },
     {
@@ -78,11 +94,5 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
 </script>
 
 <template>
-    <DataTable v-if="tasks" :columns="columns" :data="tasks">
-        <template #cell-name="{ cell }">
-            <RouterLink :to="`/tasks/${cell.row.original.id}`">
-                {{ cell.getValue() }}
-            </RouterLink>
-        </template>
-    </DataTable>
+    <DataTable v-if="tasks" :columns="columns" :data="tasks"> </DataTable>
 </template>

@@ -60,9 +60,10 @@ const table = useVueTable({
                             v-for="cell in row.getVisibleCells()"
                             :key="cell.id"
                         >
-                            <slot :name="`cell-${cell.column.id}`" :cell="cell">
-                                {{ cell.getValue() }}
-                            </slot>
+                            <FlexRender
+                                :render="cell.column.columnDef.cell"
+                                :props="cell.getContext()"
+                            />
                         </TableCell>
                     </TableRow>
                 </template>
@@ -81,11 +82,11 @@ const table = useVueTable({
     </div>
 </template>
 
-<!--<style scoped>-->
-<!--td {-->
-<!--    @apply p-0;-->
-<!--}-->
-<!--td > * {-->
-<!--    @apply p-4;-->
-<!--}-->
-<!--</style>-->
+<style scoped>
+td {
+    @apply p-0;
+}
+td > * {
+    @apply p-4;
+}
+</style>
