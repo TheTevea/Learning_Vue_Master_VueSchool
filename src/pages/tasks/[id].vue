@@ -3,7 +3,7 @@ import { taskQuery } from '@/utils/supaQueries.js';
 import { type Task } from '@/utils/supaQueries.js';
 
 const task = ref<Task | null>(null);
-const route = useRoute();
+const { id } = useRoute('/tasks/[id]').params;
 
 watch(
     () => task.value?.name,
@@ -12,7 +12,7 @@ watch(
     }
 );
 const fetchTask = async () => {
-    const { data, error } = await taskQuery(route.params.id);
+    const { data, error } = await taskQuery(Number(id));
     if (error) console.log(error);
 
     task.value = data;
@@ -37,7 +37,9 @@ await fetchTask();
         </TableRow>
         <TableRow>
             <TableHead> Project </TableHead>
-            <TableCell class="capitalize"> {{ task.projects.name }} </TableCell>
+            <TableCell class="capitalize">
+                {{ task.projects?.name }}
+            </TableCell>
         </TableRow>
         <TableRow>
             <TableHead> Status </TableHead>

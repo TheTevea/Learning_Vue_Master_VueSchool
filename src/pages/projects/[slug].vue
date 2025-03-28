@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { projectQuery } from '@/utils/supaQueries.js';
 import { type Project } from '@/utils/supaQueries.js';
-
 const project = ref<Project | null>(null);
-const route = useRoute();
+
+const route = useRoute('/projects/[slug]');
 
 watch(
     () => project.value?.name,
@@ -69,7 +69,7 @@ await fetchProject();
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="task in project.tasks" :key="task.id">
+                        <TableRow v-for="task in project?.tasks" :key="task.id">
                             <TableCell class="capitalize">
                                 <RouterLink :to="'/tasks/' + task.id">{{
                                     task.name
