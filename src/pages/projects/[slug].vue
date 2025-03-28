@@ -21,7 +21,7 @@ const fetchProject = async () => {
 await fetchProject();
 </script>
 <template>
-    <Table>
+    <Table v-if="project">
         <TableRow>
             <TableHead> Name </TableHead>
             <TableCell class="capitalize"> {{ project.name }} </TableCell>

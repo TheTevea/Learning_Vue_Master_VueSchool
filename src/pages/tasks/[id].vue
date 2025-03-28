@@ -22,7 +22,7 @@ await fetchTask();
 </script>
 
 <template>
-    <Table>
+    <Table v-if="task">
         <TableRow>
             <TableHead> Name </TableHead>
             <TableCell class="capitalize"> {{ task.name }} </TableCell>
