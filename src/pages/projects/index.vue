@@ -6,8 +6,8 @@ const projects = ref<projects | null>(null);
 
 usePageStore().pageData.title = 'My Projects';
 const fetchProjects = async () => {
-    const { data, error } = await projectsQuery;
-    if (error) console.log(error);
+    const { data, error, status } = await projectsQuery;
+    if (error) useErrorStore().setError({ error, customCode: status });
 
     projects.value = data;
 };
