@@ -13,7 +13,6 @@ const hint = ref('');
 const statusCode = ref(0);
 
 const router = useRouter();
-console.log(error.value);
 
 if (error.value && !('code' in error.value)) {
     message.value = error.value.message;
@@ -29,7 +28,8 @@ if (error.value && 'code' in error.value) {
 }
 
 router.afterEach(() => {
-    error.value = null;
+    console.log('work');
+    errorStore.activeError = null;
 });
 </script>
 
