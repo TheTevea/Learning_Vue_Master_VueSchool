@@ -12,7 +12,7 @@ watch(
     }
 );
 const fetchTask = async () => {
-    const { data, error } = await taskQuery(Number(id));
+    const { data, error, status } = await taskQuery(Number(id));
     if (error) useErrorStore().setError({ error, customCode: status });
 
     task.value = data;
