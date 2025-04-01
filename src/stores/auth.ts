@@ -2,6 +2,7 @@ import { profileQuery } from '@/utils/supaQueries.ts';
 import { acceptHMRUpdate } from 'pinia';
 import type { Session, User } from '@supabase/supabase-js';
 import type { Tables } from '../../database/types.ts';
+import { supabase } from '@/lip/supabaseClient.ts';
 
 export const useAuthStore = defineStore('auth-store', () => {
     const user = ref<null | User>(null);
@@ -30,7 +31,13 @@ export const useAuthStore = defineStore('auth-store', () => {
         await setProfile();
     };
 
-    return { user, profile, setAuth };
+    const getSession = async () => {
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session?.user) await setAuth(data.session);
+    };
+
+    return { user, profile, setAuth, getSession };
 });
 
 if (import.meta.hot) {
