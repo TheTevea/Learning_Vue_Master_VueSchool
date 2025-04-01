@@ -1,4 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const formData = ref({
+    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+});
+</script>
 
 <template>
     <div
@@ -26,6 +35,7 @@
                             type="text"
                             placeholder="johndoe19"
                             required
+                            v-model="formData.username"
                         />
                     </div>
                     <div
@@ -40,6 +50,7 @@
                                 type="text"
                                 placeholder="John"
                                 required
+                                v-model="formData.firstName"
                             />
                         </div>
                         <div class="grid gap-2">
@@ -51,6 +62,7 @@
                                 type="text"
                                 placeholder="Doe"
                                 required
+                                v-model="formData.lastName"
                             />
                         </div>
                     </div>
@@ -61,6 +73,7 @@
                             type="email"
                             placeholder="johndoe19@example.com"
                             required
+                            v-model="formData.email"
                         />
                     </div>
 
@@ -72,6 +85,7 @@
                             placeholder="*****"
                             autocomplete
                             required
+                            v-model="formData.password"
                         />
                     </div>
 
@@ -85,6 +99,7 @@
                             placeholder="*****"
                             autocomplete
                             required
+                            v-model="formData.confirmPassword"
                         />
                     </div>
                     <Button type="submit" class="w-full"> Register </Button>
