@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { supabase } from '@/lip/supabaseClient.ts';
+import { login } from '@/utils/supaAuth.ts';
 
 const router = useRouter();
 const formData = ref({
@@ -7,15 +7,9 @@ const formData = ref({
     password: '',
 });
 
-const submit = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-        email: formData.value.email,
-        password: formData.value.password,
-    });
-
-    if (error) return console.log(error);
-
-    await router.push('/');
+const signIn = async () => {
+    const isLoggedIn = await login(formData.value);
+    if (isLoggedIn) await router.push('/');
 };
 </script>
 
@@ -38,7 +32,7 @@ const submit = async () => {
                     <Separator label="Or" />
                 </div>
 
-                <form class="grid gap-4" @submit.prevent="submit">
+                <form class="grid gap-4" @submit.prevent="signIn">
                     <div class="grid gap-2">
                         <Label id="email" class="text-left">Email</Label>
                         <Input

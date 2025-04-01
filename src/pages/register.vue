@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { supabase } from '@/lip/supabaseClient.ts';
+import { register } from '@/utils/supaAuth.ts';
 
 const router = useRouter();
 
@@ -12,28 +12,10 @@ const formData = ref({
     confirmPassword: '',
 });
 
-const signup = async () => {
-    const { data, error } = await supabase.auth.signUp({
-        email: formData.value.email,
-        password: formData.value.password,
-    });
+const signUp = async () => {
+    const isRegistered = await register(formData.value);
 
-    if (error) return console.log(error);
-
-    if (data.user) {
-        const { error } = await supabase.from('profiles').insert({
-            id: data.user.id,
-            username: formData.value.username,
-            full_name: formData.value.firstName.concat(
-                ' ',
-                formData.value.lastName
-            ),
-        });
-
-        if (error) console.log('Profile error', error);
-    }
-
-    await router.push('/login');
+    if (isRegistered) await router.push('/login');
 };
 </script>
 
@@ -58,13 +40,13 @@ password: 'example-password', })
                     </Button>
                     <Separator label="Or" />
                 </div>
-                <form class="grid gap-4" @submit.prevent="signup">
+                <form class="grid gap-4" @submit.prevent="signUp">
                     <div class="grid gap-2">
                         <Label id="username" class="text-left">Username</Label>
                         <Input
                             id="username"
                             type="text"
-                            placeholder="johndoe19"
+                            placeholder="username"
                             required
                             v-model="formData.username"
                         />
