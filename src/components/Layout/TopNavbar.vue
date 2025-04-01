@@ -8,7 +8,7 @@
                 icon="lucide:search"
             ></iconify-icon>
             <Input
-                class="w-full pl-8 bg-background"
+                class="w-full pl-8 bg-background focus-visible:ring-1"
                 type="text"
                 placeholder="Search ..."
             />

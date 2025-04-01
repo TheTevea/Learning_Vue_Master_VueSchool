@@ -1,18 +1,22 @@
 <script setup lang="ts">
 interface LinkProps {
-    to: string;
+    to?: string;
     title: string;
     icon: string;
 }
 
-defineProps<{
+const props = defineProps<{
     links: LinkProps[];
 }>();
+
+const filteredLinks = props.links.filter(
+    (link): link is LinkProps & { to: string } => !!link.to
+);
 </script>
 <template>
     <RouterLink
         exact-active-class="text-primary bg-muted"
-        v-for="link in links"
+        v-for="link in filteredLinks"
         :key="link.title"
         :to="link.to"
         class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary justify-center lg:justify-normal text-muted-foreground"
