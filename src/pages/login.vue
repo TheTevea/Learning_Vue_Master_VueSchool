@@ -1,4 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { supabase } from '@/lip/supabaseClient.ts';
+
+const router = useRouter();
+const formData = ref({
+    email: '',
+    password: '',
+});
+
+const submit = async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+        email: formData.value.email,
+        password: formData.value.password,
+    });
+
+    if (error) return console.log(error);
+
+    await router.push('/');
+};
+</script>
 
 <template>
     <div
@@ -19,13 +38,14 @@
                     <Separator label="Or" />
                 </div>
 
-                <form class="grid gap-4">
+                <form class="grid gap-4" @submit.prevent="submit">
                     <div class="grid gap-2">
                         <Label id="email" class="text-left">Email</Label>
                         <Input
                             type="email"
                             placeholder="johndoe19@example.com"
                             required
+                            v-model="formData.email"
                         />
                     </div>
                     <div class="grid gap-2">
@@ -43,6 +63,7 @@
                             type="password"
                             autocomplete
                             required
+                            v-model="formData.password"
                         />
                     </div>
                     <Button type="submit" class="w-full"> Login </Button>
