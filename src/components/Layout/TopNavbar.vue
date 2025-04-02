@@ -9,6 +9,7 @@
             ></iconify-icon>
             <Input
                 class="w-full pl-8 bg-background focus-visible:ring-1"
+                id="search"
                 type="text"
                 placeholder="Search ..."
             />

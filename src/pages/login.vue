@@ -34,17 +34,19 @@ const signIn = async () => {
 
                 <form class="grid gap-4" @submit.prevent="signIn">
                     <div class="grid gap-2">
-                        <Label id="email" class="text-left">Email</Label>
+                        <Label for="email" class="text-left">Email</Label>
                         <Input
                             type="email"
                             placeholder="johndoe19@example.com"
                             required
+                            id="email"
+                            autocomplete="off"
                             v-model="formData.email"
                         />
                     </div>
                     <div class="grid gap-2">
                         <div class="flex items-center">
-                            <Label id="password">Password</Label>
+                            <Label for="password">Password</Label>
                             <a
                                 href="#"
                                 class="inline-block ml-auto text-xs underline"
@@ -55,8 +57,9 @@ const signIn = async () => {
                         <Input
                             id="password"
                             type="password"
-                            autocomplete
+                            name="password"
                             required
+                            autocomplete="current-password"
                             v-model="formData.password"
                         />
                     </div>
