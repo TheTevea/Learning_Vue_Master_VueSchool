@@ -24,18 +24,6 @@ export const validatePassword = (password: string) => {
         errors.push('Password must be at least 8 characters long');
     }
 
-    if (!/[A-Z]/.test(trimmedPassword)) {
-        errors.push('Password must contain at least one uppercase letter');
-    }
-
-    if (!/[a-z]/.test(trimmedPassword)) {
-        errors.push('Password must contain at least one lowercase letter');
-    }
-
-    if (!/\d/.test(trimmedPassword)) {
-        errors.push('Password must contain at least one number');
-    }
-
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(trimmedPassword)) {
         errors.push('Password must contain at least one special character');
     }
