@@ -7,7 +7,8 @@ const formData = ref({
     password: '',
 });
 
-const { serverError, handleServerError } = useFormErrors();
+const { serverError, handleServerError, realtimeError, handleLoginForm } =
+    useFormErrors();
 
 const signIn = async () => {
     const { error } = await login(formData.value);
@@ -47,10 +48,19 @@ const signIn = async () => {
                             autocomplete="off"
                             v-model="formData.email"
                             :class="{ 'border-red-500': serverError }"
-                            @update:modelValue="
-                                serverError !== '' && (serverError = '')
-                            "
+                            @input="handleLoginForm(formData)"
                         />
+                        <ul
+                            v-if="realtimeError?.email.length"
+                            class="text-sm text-red-500 text-left"
+                        >
+                            <li
+                                v-for="error in realtimeError.email"
+                                :key="error"
+                            >
+                                ⚠️ <span>{{ error }}</span>
+                            </li>
+                        </ul>
                     </div>
                     <div class="grid gap-2">
                         <div class="flex items-center">
@@ -74,6 +84,17 @@ const signIn = async () => {
                                 serverError !== '' && (serverError = '')
                             "
                         />
+                        <ul
+                            v-if="realtimeError?.password.length"
+                            class="text-sm text-red-500 text-left"
+                        >
+                            <li
+                                v-for="error in realtimeError.password"
+                                :key="error"
+                            >
+                                ⚠️ <span>{{ error }}</span>
+                            </li>
+                        </ul>
                     </div>
                     <ul
                         v-if="serverError"
