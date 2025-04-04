@@ -2,17 +2,17 @@ import { type projects, projectsQuery } from '@/utils/supaQueries.ts';
 import { useMemoize } from '@vueuse/core';
 
 export const useProjectsStore = defineStore('projects-store', () => {
-    const projects = ref<projects | null>(null);
+    const projects = ref<projects>([]);
     const loadProject = useMemoize(async () => await projectsQuery);
 
     const validateCache = () => {
         if (projects.value?.length) {
-            projectsQuery.then(({ data }) => {
+            projectsQuery.then(({ data, error }) => {
                 if (JSON.stringify(projects.value) === JSON.stringify(data)) {
-                    console.log('cached and fresh data matched');
+                    return;
                 } else {
-                    console.log('cached and fresh data not matched');
                     loadProject.delete();
+                    if (!error && data) projects.value = data;
                 }
             });
         }
@@ -22,7 +22,7 @@ export const useProjectsStore = defineStore('projects-store', () => {
         const { data, error, status } = await loadProject();
         if (error) useErrorStore().setError({ error, customCode: status });
 
-        projects.value = data;
+        data && (projects.value = data);
 
         validateCache();
     };
