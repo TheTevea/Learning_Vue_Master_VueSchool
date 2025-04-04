@@ -22,6 +22,10 @@ watchDebounced(
     }
 );
 
+const clearServerError = () => {
+    serverError.value !== '' && (serverError.value = '');
+};
+
 const signIn = async () => {
     const { error } = await login(formData.value);
     if (!error) return router.push('/');
@@ -59,19 +63,10 @@ const signIn = async () => {
                             id="email"
                             autocomplete="off"
                             v-model="formData.email"
+                            @update:modelValue="clearServerError"
                             :class="{ 'border-red-500': serverError }"
                         />
-                        <ul
-                            v-if="realtimeError?.email.length"
-                            class="text-sm text-red-500 text-left"
-                        >
-                            <li
-                                v-for="error in realtimeError.email"
-                                :key="error"
-                            >
-                                ⚠️ <span>{{ error }}</span>
-                            </li>
-                        </ul>
+                        <BaseErrorMessage :message="realtimeError?.email" />
                     </div>
                     <div class="grid gap-2">
                         <div class="flex items-center">
@@ -90,28 +85,12 @@ const signIn = async () => {
                             required
                             autocomplete="current-password"
                             v-model="formData.password"
+                            @update:modelValue="clearServerError"
                             :class="{ 'border-red-500': serverError }"
                         />
-                        <ul
-                            v-if="realtimeError?.password.length"
-                            class="text-sm text-red-500 text-left"
-                        >
-                            <li
-                                v-for="error in realtimeError.password"
-                                :key="error"
-                            >
-                                ⚠️ <span>{{ error }}</span>
-                            </li>
-                        </ul>
+                        <BaseErrorMessage :message="realtimeError?.password" />
                     </div>
-                    <ul
-                        v-if="serverError"
-                        class="text-sm text-red-500 text-left"
-                    >
-                        <li>
-                            ⚠️ <span>{{ serverError }}</span>
-                        </li>
-                    </ul>
+                    <BaseErrorMessage :message="serverError" />
                     <Button type="submit" class="w-full"> Login </Button>
                 </form>
                 <div class="mt-4 text-sm text-center">

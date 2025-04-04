@@ -24,9 +24,5 @@ export const validatePassword = (password: string) => {
         errors.push('Password must be at least 8 characters long');
     }
 
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(trimmedPassword)) {
-        errors.push('Password must contain at least one special character');
-    }
-
     return errors;
 };
