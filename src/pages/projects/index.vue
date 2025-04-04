@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { columns } from '@/utils/TableColumns/ProjectsColumns.ts';
-import { type projects, projectsQuery } from '@/utils/supaQueries.ts';
-
-const projects = ref<projects | null>(null);
 
 usePageStore().pageData.title = 'My Projects';
-const fetchProjects = async () => {
-    const { data, error, status } = await projectsQuery;
-    if (error) useErrorStore().setError({ error, customCode: status });
 
-    projects.value = data;
-};
+const projectLoader = useProjectsStore();
+const { projects } = storeToRefs(projectLoader);
+const { getProjects } = projectLoader;
 
-await fetchProjects();
+await getProjects();
 </script>
 
 <template>
