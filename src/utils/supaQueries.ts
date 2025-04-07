@@ -49,3 +49,11 @@ export const profileQuery = ({
     column: string;
     value: string;
 }) => supabase.from('profiles').select('*').eq(column, value).single();
+
+export const groupedProfilesQuery = (userIds: string[]) =>
+    supabase
+        .from('profiles')
+        .select('username,avatar_url, id, full_name')
+        .in('id', userIds);
+
+export type Collabs = QueryData<ReturnType<typeof groupedProfilesQuery>>;
