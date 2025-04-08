@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { columns } from '@/utils/TableColumns/ProjectsColumns.ts';
-import { useCollabs } from '@/composables/collabs.ts';
 
 usePageStore().pageData.title = 'My Projects';
 
@@ -10,10 +9,11 @@ const { getProjects } = projectLoader;
 
 await getProjects();
 
-const { getProfilesByIds } = useCollabs();
-const test = await getProfilesByIds(projects.value[0].collaborators);
+const { getGroupedCollabs, groupedCollabs } = useCollabs();
 
-console.log('test', test);
+await getGroupedCollabs(projects.value);
+
+console.log('groupedCollabs', groupedCollabs.value);
 </script>
 
 <template>
