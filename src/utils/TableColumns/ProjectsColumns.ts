@@ -3,7 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table';
 import type { projects } from '@/utils/supaQueries.ts';
 import type { GroupedCollabs } from '@/types/GroupedCollabs.ts';
 import type { Ref } from 'vue';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export const columns = (
     collabs: Ref<GroupedCollabs>
@@ -41,14 +41,31 @@ export const columns = (
             return h(
                 'div',
                 { class: 'text-left font-medium' },
-                collabs.value[row.original.id].map((collab) => {
-                    return h(Avatar, () =>
-                        h(AvatarImage, {
-                            src: collab.avatar_url || '',
-                            alt: collab.username,
-                        })
-                    );
-                })
+                collabs.value[row.original.id]
+                    ? collabs.value[row.original.id].map((collab) => {
+                          return h(
+                              RouterLink,
+                              {
+                                  to: `/users/${collab.username}`,
+                              },
+                              () => {
+                                  return h(
+                                      Avatar,
+                                      { class: 'hover:scale-110' },
+                                      () =>
+                                          h(AvatarImage, {
+                                              src: collab.avatar_url || '',
+                                              alt: collab.username,
+                                          })
+                                  );
+                              }
+                          );
+                      })
+                    : row.original.collaborators.map(() => {
+                          return h(Avatar, { class: 'animate-pulse' }, () =>
+                              h(AvatarFallback, () => '')
+                          );
+                      })
             );
         },
     },

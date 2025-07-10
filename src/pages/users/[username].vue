@@ -26,7 +26,7 @@ await getProfile();
     >
         <div class="flex flex-col items-center justify-center pb-4">
             <Avatar size="lg">
-                <AvatarImage src="" alt="@radix-vue" />
+                <AvatarImage :src="profile?.avatar_url" alt="@radix-vue" />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 
