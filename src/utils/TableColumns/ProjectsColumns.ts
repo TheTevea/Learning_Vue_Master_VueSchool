@@ -4,6 +4,7 @@ import type { projects } from '@/utils/supaQueries.ts';
 import type { GroupedCollabs } from '@/types/GroupedCollabs.ts';
 import type { Ref } from 'vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import AppInPlaceEditStatus from '@/components/AppInPlaceEdit/AppInPlaceEditStatus.vue';
 
 export const columns = (
     collabs: Ref<GroupedCollabs>
@@ -29,7 +30,7 @@ export const columns = (
             return h(
                 'div',
                 { class: 'text-left font-medium' },
-                row.getValue('status')
+                h(AppInPlaceEditStatus, { modelValue: row.original.status })
             );
         },
     },

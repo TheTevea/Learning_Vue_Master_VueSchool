@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppInPlaceEditText from '@/components/AppInPlaceEditText/AppInPlaceEditText.vue';
+import AppInPlaceEditText from '@/components/AppInPlaceEdit/AppInPlaceEditText.vue';
 
 const projectLoad = useProjectsStore();
 const { project } = storeToRefs(projectLoad);
@@ -23,16 +23,25 @@ await getProject(slug);
                 <AppInPlaceEditText
                     v-model="project.name"
                     @commit="updateProject"
+                    element-type="input"
                 />
             </TableCell>
         </TableRow>
         <TableRow>
             <TableHead> Description </TableHead>
-            <TableCell> {{ project.description }}</TableCell>
+            <TableCell>
+                <AppInPlaceEditText
+                    element-type="textarea"
+                    v-model="project.description"
+                    @commit="updateProject"
+                />
+            </TableCell>
         </TableRow>
         <TableRow>
             <TableHead> Status </TableHead>
-            <TableCell>{{ project.status }}</TableCell>
+            <TableCell>
+                <AppInPlaceEditStatus v-model="project.status" />
+            </TableCell>
         </TableRow>
         <TableRow>
             <TableHead> Collaborators </TableHead>
