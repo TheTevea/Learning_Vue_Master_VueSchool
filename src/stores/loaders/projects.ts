@@ -1,11 +1,17 @@
-import { projectQuery, projectsQuery } from '@/utils/supaQueries.ts';
+import {
+    projectQuery,
+    projectsQuery,
+    updateProjectQuery,
+} from '@/utils/supaQueries.ts';
 import { useMemoize } from '@vueuse/core';
 import type { Project, projects } from '@/utils/supaQueries.js';
 
 export const useProjectsStore = defineStore('projects-store', () => {
     const projects = ref<projects | null>(null);
     const project = ref<Project | null>(null);
-    const loadProjects = useMemoize(async (key: string) => await projectsQuery);
+    const loadProjects = useMemoize(
+        async (_key: string) => await projectsQuery
+    );
     const loadProject = useMemoize(
         async (slug: string) => await projectQuery(slug)
     );
@@ -66,5 +72,13 @@ export const useProjectsStore = defineStore('projects-store', () => {
         });
     };
 
-    return { projects, getProjects, getProject, project };
+    const updateProject = async () => {
+        if (!project.value) return;
+
+        const { tasks, id, ...projectProperties } = project.value;
+
+        await updateProjectQuery(projectProperties, project.value.id);
+    };
+
+    return { projects, getProjects, getProject, project, updateProject };
 });

@@ -3,7 +3,7 @@ import AppInPlaceEditText from '@/components/AppInPlaceEditText/AppInPlaceEditTe
 
 const projectLoad = useProjectsStore();
 const { project } = storeToRefs(projectLoad);
-const { getProject } = projectLoad;
+const { getProject, updateProject } = projectLoad;
 const slug = useRoute('/projects/[slug]').params.slug;
 
 watch(
@@ -20,7 +20,10 @@ await getProject(slug);
         <TableRow>
             <TableHead> Name </TableHead>
             <TableCell class="capitalize">
-                <AppInPlaceEditText v-model="project.name" />
+                <AppInPlaceEditText
+                    v-model="project.name"
+                    @commit="updateProject"
+                />
             </TableCell>
         </TableRow>
         <TableRow>
