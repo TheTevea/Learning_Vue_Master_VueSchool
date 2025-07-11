@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppInPlaceEditText from '@/components/AppInPlaceEditText/AppInPlaceEditText.vue';
+
 const projectLoad = useProjectsStore();
 const { project } = storeToRefs(projectLoad);
 const { getProject } = projectLoad;
@@ -17,7 +19,9 @@ await getProject(slug);
     <Table v-if="project">
         <TableRow>
             <TableHead> Name </TableHead>
-            <TableCell class="capitalize"> {{ project.name }} </TableCell>
+            <TableCell class="capitalize">
+                <AppInPlaceEditText v-model="project.name" />
+            </TableCell>
         </TableRow>
         <TableRow>
             <TableHead> Description </TableHead>
