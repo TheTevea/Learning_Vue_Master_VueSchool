@@ -2,8 +2,11 @@
 import type { Tables } from '../../../database/types.ts';
 import { profileQuery } from '@/utils/supaQueries.ts';
 import { useErrorStore } from '@/stores/error.ts';
+import { usePageStore } from '@/stores/page.ts';
 
 const { username } = useRoute('/users/[username]').params;
+
+usePageStore().pageData.title = '';
 
 const profile = ref<Tables<'profiles'> | null>(null);
 
@@ -26,7 +29,10 @@ await getProfile();
     >
         <div class="flex flex-col items-center justify-center pb-4">
             <Avatar size="lg">
-                <AvatarImage :src="profile?.avatar_url" alt="@radix-vue" />
+                <AvatarImage
+                    :src="profile?.avatar_url || ''"
+                    alt="@radix-vue"
+                />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 

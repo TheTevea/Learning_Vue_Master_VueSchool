@@ -14,6 +14,11 @@ watch(
 );
 
 await getProject(slug);
+
+const { getProfilesByIds } = useCollabs();
+const collabs = project.value?.collaborators
+    ? await getProfilesByIds(project.value?.collaborators)
+    : [];
 </script>
 <template>
     <Table v-if="project">
@@ -51,15 +56,21 @@ await getProject(slug);
             <TableCell>
                 <div class="flex">
                     <Avatar
+                        v-for="collab in collabs"
                         class="-mr-4 border border-primary hover:scale-110 transition-transform"
-                        v-for="n in 5"
-                        :key="n"
+                        :key="collab.id"
                     >
                         <RouterLink
                             class="w-full h-full flex items-center justify-center"
-                            to=""
+                            :to="{
+                                name: '/users/[username]',
+                                params: { username: collab.username },
+                            }"
                         >
-                            <AvatarImage src="" alt="" />
+                            <AvatarImage
+                                :src="collab.avatar_url || ''"
+                                :alt="collab.username + 'profile'"
+                            />
                             <AvatarFallback> </AvatarFallback>
                         </RouterLink>
                     </Avatar>
@@ -82,10 +93,12 @@ await getProject(slug);
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="task in project?.tasks" :key="task.id">
-                            <TableCell class="capitalize">
-                                <RouterLink :to="'/tasks/' + task.id">{{
-                                    task.name
-                                }}</RouterLink>
+                            <TableCell class="capitalize p-0">
+                                <RouterLink
+                                    :to="'/tasks/' + task.id"
+                                    class="text-left block hover:bg-muted p-4"
+                                    >{{ task.name }}</RouterLink
+                                >
                             </TableCell>
                             <TableCell> {{ task.status }} </TableCell>
                             <TableCell> {{ task.due_date }} </TableCell>
