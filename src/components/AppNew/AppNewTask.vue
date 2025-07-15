@@ -6,10 +6,12 @@ const sheetOpen = defineModel<boolean>();
         <SheetContent>
             <SheetHeader>
                 <SheetTitle>Create new task</SheetTitle>
-                <SheetDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                </SheetDescription>
+                <FormKit
+                    type="text"
+                    name="taskName"
+                    label="Task Name"
+                    placeholder="Enter task name"
+                />
             </SheetHeader>
         </SheetContent>
     </Sheet>

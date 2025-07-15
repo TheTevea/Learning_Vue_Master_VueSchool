@@ -23,6 +23,8 @@
     "typed-router.d.ts",
     "shims-vue.d.ts",
     "auto-imports.d.ts",
-    "components.d.ts"
+    "components.d.ts",
+    "formkit.config.ts",
+    "formkit.theme.ts"
   ]
 }
