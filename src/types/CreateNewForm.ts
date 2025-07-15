@@ -1,6 +1,7 @@
 export interface CreateNewTask {
     name: string;
+    slug?: string;
     description: string;
-    project: number;
-    profile_id: number;
+    project_id: number;
+    profile_id: string;
 }
