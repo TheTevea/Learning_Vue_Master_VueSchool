@@ -33,7 +33,7 @@ export const updateProjectQuery = (updatedProject = {}, id: number) => {
     return supabase.from('projects').update(updatedProject).eq('id', id);
 };
 
-export const taskQuery = (id: number) =>
+export const taskQuery = (slug: string) =>
     supabase
         .from('tasks')
         .select(
@@ -41,10 +41,14 @@ export const taskQuery = (id: number) =>
             projects(id, name
             )`
         )
-        .eq('id', id)
+        .eq('slug', slug)
         .single();
 
 export type Task = QueryData<ReturnType<typeof taskQuery>>;
+
+export const updateTaskQuery = (updatedTask = {}, id: number) => {
+    return supabase.from('tasks').update(updatedTask).eq('id', id);
+};
 
 export const profileQuery = ({
     column,

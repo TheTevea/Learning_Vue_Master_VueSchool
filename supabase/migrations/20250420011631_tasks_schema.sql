@@ -5,6 +5,7 @@ create table
           id bigint primary key generated always as identity not null,
           created_at timestamp default now() not null,
           name text not null,
+          slug text unique not null,
           status current_status default 'in-progress' not null,
           description text not null,
           due_date date default null,

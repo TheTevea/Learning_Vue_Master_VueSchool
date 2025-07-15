@@ -5,6 +5,7 @@ import {
 } from '@/utils/supaQueries.ts';
 import { useMemoize } from '@vueuse/core';
 import type { Project, projects } from '@/utils/supaQueries.js';
+import { validateCache } from '@/utils/validateCache.ts';
 
 export const useProjectsStore = defineStore('projects-store', () => {
     const projects = ref<projects | null>(null);
@@ -15,32 +16,6 @@ export const useProjectsStore = defineStore('projects-store', () => {
     const loadProject = useMemoize(
         async (slug: string) => await projectQuery(slug)
     );
-
-    interface validateCacheParams {
-        ref: typeof projects | typeof project;
-        query: typeof projectsQuery | typeof projectQuery;
-        key: string;
-        loadFn: typeof loadProject | typeof loadProjects;
-    }
-
-    const validateCache = ({
-        ref,
-        query,
-        key,
-        loadFn,
-    }: validateCacheParams) => {
-        if (ref.value) {
-            const finalQuery = query instanceof Function ? query(key) : query;
-            finalQuery.then(({ data, error }) => {
-                if (JSON.stringify(ref.value) === JSON.stringify(data)) {
-                    return;
-                } else {
-                    loadFn.delete(key);
-                    if (!error && data) ref.value = data;
-                }
-            });
-        }
-    };
 
     const getProjects = async () => {
         projects.value = null;

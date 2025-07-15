@@ -1,8 +1,14 @@
 import { RouterLink } from 'vue-router';
 import type { ColumnDef } from '@tanstack/vue-table';
+import AppInPlaceEditStatus from '@/components/AppInPlaceEdit/AppInPlaceEditStatus.vue';
+import type { Ref } from 'vue';
+import type { GroupedCollabs } from '@/types/GroupedCollabs.ts';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { tasksWithProjects } from '@/utils/supaQueries.ts';
 
-export const columns: ColumnDef<tasksWithProjects[0]>[] = [
+export const columns = (
+    collabs: Ref<GroupedCollabs>
+): ColumnDef<tasksWithProjects[0]>[] => [
     {
         accessorKey: 'name',
         header: () => h('div', { class: 'text-left' }, 'Name'),
@@ -10,7 +16,7 @@ export const columns: ColumnDef<tasksWithProjects[0]>[] = [
             return h(
                 RouterLink,
                 {
-                    to: `/tasks/${row.original.id}`,
+                    to: `/tasks/${row.original.slug}`,
                     class: 'text-left capitalize font-medium hover:bg-muted w-full block',
                 },
                 () => row.getValue('name')
@@ -24,7 +30,10 @@ export const columns: ColumnDef<tasksWithProjects[0]>[] = [
             return h(
                 'div',
                 { class: 'text-left font-medium' },
-                row.getValue('status')
+                h(AppInPlaceEditStatus, {
+                    modelValue: row.original.status,
+                    readonly: true,
+                })
             );
         },
     },
@@ -62,7 +71,31 @@ export const columns: ColumnDef<tasksWithProjects[0]>[] = [
             return h(
                 'div',
                 { class: 'text-left font-medium' },
-                JSON.stringify(row.getValue('collaborators'))
+                collabs.value[row.original.id]
+                    ? collabs.value[row.original.id].map((collab) => {
+                          return h(
+                              RouterLink,
+                              {
+                                  to: `/users/${collab.username}`,
+                              },
+                              () => {
+                                  return h(
+                                      Avatar,
+                                      { class: 'hover:scale-110' },
+                                      () =>
+                                          h(AvatarImage, {
+                                              src: collab.avatar_url || '',
+                                              alt: collab.username,
+                                          })
+                                  );
+                              }
+                          );
+                      })
+                    : row.original.collaborators.map(() => {
+                          return h(Avatar, { class: 'animate-pulse' }, () =>
+                              h(AvatarFallback, () => '')
+                          );
+                      })
             );
         },
     },

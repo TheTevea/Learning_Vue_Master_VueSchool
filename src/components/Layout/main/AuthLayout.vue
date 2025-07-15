@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const { pageData } = storeToRefs(usePageStore());
+const sheetTaskOpen = ref<boolean>(false);
 </script>
 
 <template>
-    <Sidebar />
+    <Sidebar @taskClicked="sheetTaskOpen = true" />
+    <AppNewTask v-model="sheetTaskOpen" />
     <div class="flex flex-col lg:ml-52 ml-16 transition-[margin]">
         <TopNavbar />
         <main class="flex flex-col flex-1 gap-4 p-4 lg:gap-6 lg:p-6">
