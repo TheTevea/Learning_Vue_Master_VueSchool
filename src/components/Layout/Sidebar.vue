@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { useMenu } from '@/composables/menu.ts';
+import { useWindowSize } from '@vueuse/core';
+
+defineEmits(['taskClicked', 'projectClicked']);
+
+const { menuOpen, toggleMenu } = useMenu();
+
 const links = [
     { to: '/', title: 'Dashboard', icon: 'lucide:house' },
     { to: '/projects', title: 'Projects', icon: 'lucide:building-2' },
@@ -21,17 +28,26 @@ const executeAction = async (linkTitle: string) => {
     }
 };
 
-defineEmits(['taskClicked', 'projectClicked']);
+watchEffect(() => {
+    const { width } = useWindowSize();
+    menuOpen.value = width.value >= 1024;
+});
 </script>
 
 <template>
     <aside
-        class="flex flex-col h-screen gap-2 border-r fixed bg-muted/40 lg:w-52 w-16 transition-[width]"
+        class="flex flex-col h-screen gap-2 border-r fixed bg-muted/40 transition-[width]"
+        :class="menuOpen ? 'w-52' : 'w-24'"
     >
         <div
             class="flex h-16 items-center border-b px-2 lg:px-4 shrink-0 gap-1 justify-between"
         >
-            <Button variant="outline" size="icon" class="w-8 h-8">
+            <Button
+                @click="toggleMenu"
+                variant="outline"
+                size="icon"
+                class="w-8 h-8"
+            >
                 <iconify-icon icon="lucide:menu"></iconify-icon>
             </Button>
 
