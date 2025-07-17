@@ -21,14 +21,18 @@ await getTask(slug);
 const { getProfilesByIds } = useCollabs();
 const collabs = ref<Collabs>([]);
 
+const isLoadingCollabs = ref(true);
+
 watch(
     () => task.value?.collaborators,
     async (collaborators) => {
+        isLoadingCollabs.value = true;
         if (collaborators && collaborators.length) {
             collabs.value = await getProfilesByIds(collaborators);
         } else {
             collabs.value = [];
         }
+        isLoadingCollabs.value = false;
     },
     { immediate: true }
 );
@@ -88,27 +92,38 @@ const triggerDelete = async () => {
             </TableRow>
             <TableRow>
                 <TableHead> Collaborators </TableHead>
-                <TableCell>
-                    <div class="flex">
-                        <Avatar
-                            v-for="collab in collabs"
-                            class="-mr-4 border border-primary hover:scale-110 transition-transform"
-                            :key="collab.id"
-                        >
-                            <RouterLink
-                                class="w-full h-full flex items-center justify-center"
-                                :to="{
-                                    name: '/users/[username]',
-                                    params: { username: collab.username },
-                                }"
+                <TableCell class="py-0">
+                    <div class="flex items-center h-20">
+                        <template v-if="isLoadingCollabs">
+                            <Avatar
+                                v-for="(_, i) in task.collaborators"
+                                :key="i"
+                                class="-mr-4 w-12 h-12 animate-pulse"
                             >
-                                <AvatarImage
-                                    :src="collab.avatar_url || ''"
-                                    :alt="collab.username + 'profile'"
-                                />
-                                <AvatarFallback> </AvatarFallback>
-                            </RouterLink>
-                        </Avatar>
+                                <AvatarFallback />
+                            </Avatar>
+                        </template>
+                        <template v-else>
+                            <Avatar
+                                v-for="collab in collabs"
+                                :key="collab.id"
+                                class="-mr-4 border border-primary w-12 h-12 hover:scale-110 transition-transform"
+                            >
+                                <RouterLink
+                                    class="w-full h-full flex items-center justify-center"
+                                    :to="{
+                                        name: '/users/[username]',
+                                        params: { username: collab.username },
+                                    }"
+                                >
+                                    <AvatarImage
+                                        :src="collab.avatar_url || ''"
+                                        :alt="collab.username + 'profile'"
+                                    />
+                                    <AvatarFallback />
+                                </RouterLink>
+                            </Avatar>
+                        </template>
                     </div>
                 </TableCell>
             </TableRow>

@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { useDark, useToggle } from '@vueuse/core';
+
+const { profile } = storeToRefs(useAuthStore());
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+</script>
 <template>
     <nav
         class="h-16 border-b bg-muted/40 flex gap-2 justify-between px-6 items-center"
@@ -14,25 +22,42 @@
                 placeholder="Search ..."
             />
         </form>
-        <DropdownMenu>
-            <DropdownMenuTrigger>
-                <Avatar>
-                    <AvatarImage
-                        src="https://github.com/unovue.png"
-                        alt="@unovue"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div class="flex justify-center items-center gap-2">
+            <Button @click="toggleDark()" class="w-8 h-8">
+                <Transition name="scale" mode="out-in">
+                    <iconify-icon
+                        v-if="isDark"
+                        icon="lucide:sun"
+                    ></iconify-icon>
+                    <iconify-icon v-else icon="lucide:moon"></iconify-icon>
+                </Transition>
+            </Button>
+            <DropdownMenu v-if="profile">
+                <DropdownMenuTrigger>
+                    <Avatar>
+                        <AvatarImage
+                            :src="profile.avatar_url || ''"
+                            :alt="`${profile.full_name} profile picture`"
+                        />
+                        <AvatarFallback>{{ profile.username }}</AvatarFallback>
+                    </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                        <RouterLink
+                            :to="{
+                                name: '/users/[username]',
+                                params: { username: profile.username },
+                            }"
+                            class="w-full h-full"
+                        >
+                            Profile
+                        </RouterLink>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     </nav>
 </template>
-<script setup lang="ts"></script>
