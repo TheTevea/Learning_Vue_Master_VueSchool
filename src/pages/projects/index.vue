@@ -15,5 +15,11 @@ const columnsWithCollabs = columns(groupedCollabs);
 </script>
 
 <template>
-    <DataTable v-if="projects" :columns="columnsWithCollabs" :data="projects" />
+    <div>
+        <DataTable
+            v-if="projects"
+            :columns="columnsWithCollabs"
+            :data="projects"
+        />
+    </div>
 </template>

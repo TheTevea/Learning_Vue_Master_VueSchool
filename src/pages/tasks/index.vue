@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { columns } from '@/utils/TableColumns/TasksColumns.ts';
+import { useMeta } from 'vue-meta';
 
 const taskLoader = useTasksStore();
 const { tasks } = storeToRefs(taskLoader);
@@ -13,8 +14,19 @@ const { getGroupedCollabs, groupedCollabs } = useCollabs();
 getGroupedCollabs(tasks.value ?? []);
 
 const columnsWithCollabs = columns(groupedCollabs);
+
+useMeta({
+    title: 'Project | Pulse',
+    description: {
+        name: 'description',
+        content:
+            'Project management tool that helps you organize your work and tasks.',
+    },
+});
 </script>
 
 <template>
-    <DataTable v-if="tasks" :columns="columnsWithCollabs" :data="tasks" />
+    <div>
+        <DataTable v-if="tasks" :columns="columnsWithCollabs" :data="tasks" />
+    </div>
 </template>
