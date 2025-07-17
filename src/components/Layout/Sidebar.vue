@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useMenu } from '@/composables/menu.ts';
 import { useWindowSize } from '@vueuse/core';
+import { type MenuInjectionOptions, menuKey } from '@/utils/injectionKeys.ts';
 
 defineEmits(['taskClicked', 'projectClicked']);
 
-const { menuOpen, toggleMenu } = useMenu();
+const { menuOpen, toggleMenu } = inject(menuKey) as MenuInjectionOptions;
 
 const links = [
     { to: '/', title: 'Dashboard', icon: 'lucide:house' },

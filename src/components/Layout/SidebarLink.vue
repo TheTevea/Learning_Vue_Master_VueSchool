@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMenu } from '@/composables/menu.ts';
+import { type MenuInjectionOptions, menuKey } from '@/utils/injectionKeys.ts';
 
 interface LinkProps {
     to?: string;
@@ -19,7 +19,7 @@ const emitActionClicked = (LinkTitle: string) => {
     emits('actionClicked', LinkTitle);
 };
 
-const { menuOpen } = useMenu();
+const { menuOpen } = inject(menuKey) as MenuInjectionOptions;
 </script>
 <template>
     <template v-for="link in links" :key="link.title">

@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { useMenu } from '@/composables/menu.ts';
+import { menuKey } from '@/utils/injectionKeys.ts';
 
 const { pageData } = storeToRefs(usePageStore());
 const sheetTaskOpen = ref<boolean>(false);
 
-const { menuOpen } = useMenu();
+const menuOpen = ref(false);
+const toggleMenu = () => {
+    menuOpen.value = !menuOpen.value;
+};
+
+provide(menuKey, {
+    menuOpen,
+    toggleMenu,
+});
 </script>
 
 <template>
